@@ -1,7 +1,7 @@
 package com.project.chat.enums;
 
 
-public enum EResultType {
+public enum ResultTypeEnum {
 
     /**
      * 访问成功返回
@@ -37,7 +37,7 @@ public enum EResultType {
 
     private String msg;
 
-    private EResultType(Integer code, String msg) {
+    ResultTypeEnum(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }

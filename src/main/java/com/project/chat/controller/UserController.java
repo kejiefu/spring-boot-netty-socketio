@@ -3,7 +3,7 @@ package com.project.chat.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.project.chat.entity.UserEntity;
-import com.project.chat.enums.EResultType;
+import com.project.chat.enums.ResultTypeEnum;
 import com.project.chat.service.GroupSerivice;
 import com.project.chat.service.UserSerivice;
 import io.netty.util.internal.StringUtil;
@@ -47,17 +47,17 @@ public class UserController extends BaseController<UserEntity> {
             return retResultData(-1, "用户名或密码不能为空");
         }
 
-        UserEntity user = userSerivice.findUserByUserName(name);
+        UserEntity user = userSerivice.findUserByName(name);
         if (user != null) {
             if (!user.getPassword().equals(password)) {
-                return retResultData(EResultType.PASSWORK_ERROR);
+                return retResultData(ResultTypeEnum.PASSWORK_ERROR);
             }
             user.setPassword("");
             session.setAttribute("username", user);
         } else {
-            return retResultData(EResultType.PASSWORK_ERROR);
+            return retResultData(ResultTypeEnum.PASSWORK_ERROR);
         }
-        return retResultData(EResultType.SUCCESS, user);
+        return retResultData(ResultTypeEnum.SUCCESS, user);
     }
 
     @ResponseBody
@@ -66,12 +66,12 @@ public class UserController extends BaseController<UserEntity> {
         if (StringUtil.isNullOrEmpty(name) || StringUtil.isNullOrEmpty(password)) {
             return retResultData(-1, "用户名或密码不能为空");
         }
-        UserEntity user = userSerivice.findUserByUserName(name);
+        UserEntity user = userSerivice.findUserByName(name);
         if (user != null) {
             return retResultData(-1, "用户名已存在");
         }
         user = userSerivice.register(name, password, avatar);
-        return retResultData(EResultType.SUCCESS, user);
+        return retResultData(ResultTypeEnum.SUCCESS, user);
     }
 
     /**
@@ -90,7 +90,7 @@ public class UserController extends BaseController<UserEntity> {
     @ResponseBody
     @GetMapping(value = "/getToken")
     public String getAuthToken() {
-        return retResultData(EResultType.SUCCESS, getSessionUser().getAuth_token());
+        return retResultData(ResultTypeEnum.SUCCESS, getSessionUser().getToken());
     }
 
 

@@ -1,13 +1,13 @@
 package com.project.chat.service;
 
 
-import com.project.chat.entity.BaseEntity;
+import com.project.chat.entity.base.BaseEntity;
 import com.project.chat.entity.UserEntity;
 
 import java.util.List;
 
 
-public interface UserSerivice<T extends BaseEntity> extends BaseSerivice<UserEntity> {
+public interface UserSerivice<T extends BaseEntity> extends BaseService<UserEntity> {
 
 
     /**
@@ -16,7 +16,7 @@ public interface UserSerivice<T extends BaseEntity> extends BaseSerivice<UserEnt
      * @param name
      * @return
      */
-    UserEntity findUserByUserName(String name);
+    UserEntity findUserByName(String name);
 
     /**
      * 使用 token 查询 实体

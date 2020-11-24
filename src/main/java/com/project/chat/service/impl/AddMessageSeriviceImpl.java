@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.project.chat.dao.AddMessageDao;
 import com.project.chat.dao.GroupDao;
 import com.project.chat.dao.UserDao;
+import com.project.chat.dto.AddInfo;
 import com.project.chat.entity.*;
-import com.project.chat.enums.AddMessageType;
+import com.project.chat.entity.base.BaseEntity;
+import com.project.chat.enums.AddMessageTypeEnum;
 import com.project.chat.exception.RepeatException;
 import com.project.chat.service.AddMessageSerivice;
 import com.project.chat.service.GroupSerivice;
@@ -73,9 +75,9 @@ public class AddMessageSeriviceImpl<T extends BaseEntity> extends BaseSeriviceIm
             info.setRead(message.getMsgResult().toString());
             UserEntity userEntity = getEntityById(message.getFromUid());
             userEntity.setPassword("");
-            userEntity.setAuth_token("");
+            userEntity.setToken("");
             info.setUser(userEntity);
-            info.setFrom_group(message.getGroupId());
+            info.setFromGroup(message.getGroupId());
             info.setTime(message.getTime());
             info.setRemark(message.getRemark());
             infos.add(info);
@@ -102,13 +104,13 @@ public class AddMessageSeriviceImpl<T extends BaseEntity> extends BaseSeriviceIm
         //查询群下面的所有人  如果有当前群包含了 自己则说明是重复加群
         List<GroupUser> groupUsers = groupSerivice.findUsersByGroupId(groupId);
         for (GroupUser user : groupUsers) {
-            if (user.getUser_id().equals(userId)) {
+            if (user.getUserId().equals(userId)) {
                 throw new RepeatException(-1, "不能重复加群");
             }
         }
 
         AddMessage addMessage = (AddMessage) addMessageDao.findEntityById(messageId);
-        addMessage.setMsgResult(AddMessageType.Agree);
+        addMessage.setMsgResult(AddMessageTypeEnum.Agree);
         addMessageDao.updateEntityById(messageId, addMessage);
 
         groupSerivice.joinGroup(entity, groupId);
@@ -122,8 +124,9 @@ public class AddMessageSeriviceImpl<T extends BaseEntity> extends BaseSeriviceIm
     @Override
     public void updateAddMessage(String messageBoxId) {
         AddMessage addMessage = (AddMessage) addMessageDao.findEntityById(messageBoxId);
-        addMessage.setMsgResult(AddMessageType.Reject);
-        addMessageDao.saveEntity(addMessage);  //更新数据
+        addMessage.setMsgResult(AddMessageTypeEnum.Reject);
+        //更新数据
+        addMessageDao.saveEntity(addMessage);
     }
 
 

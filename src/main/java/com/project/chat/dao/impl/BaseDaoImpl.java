@@ -2,10 +2,10 @@ package com.project.chat.dao.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.mongodb.WriteResult;
-
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import com.project.chat.dao.BaseDao;
-import com.project.chat.entity.BaseEntity;
+import com.project.chat.entity.base.BaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -28,8 +28,10 @@ public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     public BaseDaoImpl() {
         // 使用反射技术得到T的真实类型
-        ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass(); // 获取当前new的对象的 泛型的父类 类型
-        this.entityClass = (Class<T>) pt.getActualTypeArguments()[0]; // 获取第一个类型参数的真实类型
+        // 获取当前new的对象的 泛型的父类 类型
+        ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
+        // 获取第一个类型参数的真实类型
+        this.entityClass = (Class<T>) pt.getActualTypeArguments()[0];
     }
 
 
@@ -60,23 +62,16 @@ public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
             }
         }
         //更新查询返回结果集的第一条
-        WriteResult result = mongoTemplate.updateFirst(query, update, entityClass);
-        //更新查询返回结果集的所有
-//        return mongoTemplate.updateMulti(query,update,entityClass);
-//        if (result != null)
-//            return result.getN();
-//        else
-//            return t;
+        UpdateResult result = mongoTemplate.updateFirst(query, update, entityClass);
+
         return entity;
     }
 
-
-    // 删除对象
     @Override
-    public int deleteEntityById(String id) {
+    public long deleteEntityById(String id) {
         Query query = new Query(Criteria.where("id").is(id));
-        WriteResult writeResult = mongoTemplate.remove(query, entityClass);
-        return writeResult != null ? writeResult.getN() : 0;
+        DeleteResult deleteResult = mongoTemplate.remove(query, entityClass);
+        return deleteResult.getDeletedCount();
     }
 
     @Override

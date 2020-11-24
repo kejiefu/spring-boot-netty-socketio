@@ -2,15 +2,15 @@ package com.project.chat.service.impl;
 
 
 import com.project.chat.dao.BaseDao;
-import com.project.chat.entity.BaseEntity;
-import com.project.chat.service.BaseSerivice;
+import com.project.chat.entity.base.BaseEntity;
+import com.project.chat.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-public class BaseSeriviceImpl<T extends BaseEntity> implements BaseSerivice<T> {
+public class BaseSeriviceImpl<T extends BaseEntity> implements BaseService<T> {
 
     @Qualifier("userDaoImpl")
     @Autowired
@@ -20,8 +20,10 @@ public class BaseSeriviceImpl<T extends BaseEntity> implements BaseSerivice<T> {
 
     public BaseSeriviceImpl() {
         // 使用反射技术得到T的真实类型
-        ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass(); // 获取当前new的对象的 泛型的父类 类型
-        this.entityClass = (Class<T>) pt.getActualTypeArguments()[0]; // 获取第一个类型参数的真实类型
+        // 获取当前new的对象的 泛型的父类 类型
+        ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
+        // 获取第一个类型参数的真实类型
+        this.entityClass = (Class<T>) pt.getActualTypeArguments()[0];
     }
 
     @Override
@@ -31,16 +33,16 @@ public class BaseSeriviceImpl<T extends BaseEntity> implements BaseSerivice<T> {
 
     @Override
     public void saveEntity(T entity) {
-         baseDao.saveEntity(entity);
+        baseDao.saveEntity(entity);
     }
-    
+
     @Override
     public T updateEntityById(String id, T entity) {
         return baseDao.updateEntityById(id, entity);
     }
 
     @Override
-    public int deleteEntityById(String id) {
+    public long deleteEntityById(String id) {
         return baseDao.deleteEntityById(id);
     }
 

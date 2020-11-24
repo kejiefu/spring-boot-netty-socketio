@@ -1,12 +1,20 @@
 package com.project.chat.exception;
 
 
-public class ParameterException extends RuntimeException{
+public class ParameterException extends RuntimeException {
 
-    //自定义错误码
+    /**
+     * 自定义错误码
+     */
     private Integer code;
-    //自定义构造器，只保留一个，让其必须输入错误码及内容
-    public ParameterException(int code,String msg) {
+
+    /**
+     * 自定义构造器，只保留一个，让其必须输入错误码及内容
+     *
+     * @param code
+     * @param msg
+     */
+    public ParameterException(int code, String msg) {
         super(msg);
         this.code = code;
     }

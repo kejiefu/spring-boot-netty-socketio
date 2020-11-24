@@ -2,7 +2,7 @@ package com.project.chat.service;
 
 
 
-import com.project.chat.entity.BaseEntity;
+import com.project.chat.entity.base.BaseEntity;
 import com.project.chat.entity.GroupEntity;
 import com.project.chat.entity.GroupUser;
 import com.project.chat.entity.UserEntity;
@@ -10,7 +10,7 @@ import com.project.chat.entity.UserEntity;
 import java.util.List;
 
 
-public interface GroupSerivice<T extends BaseEntity> extends BaseSerivice<GroupEntity> {
+public interface GroupSerivice<T extends BaseEntity> extends BaseService<GroupEntity> {
 
 
     /**

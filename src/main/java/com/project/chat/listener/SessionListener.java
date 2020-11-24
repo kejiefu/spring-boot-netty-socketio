@@ -13,6 +13,7 @@ import java.util.HashSet;
  */
 @WebListener
 public class SessionListener implements HttpSessionListener, HttpSessionAttributeListener {
+
     public static final Logger logger = LoggerFactory.getLogger(SessionListener.class);
 
     @Override

@@ -2,7 +2,7 @@ package com.project.chat.dao;
 
 
 import com.project.chat.entity.AddMessage;
-import com.project.chat.entity.BaseEntity;
+import com.project.chat.entity.base.BaseEntity;
 
 import java.util.List;
 

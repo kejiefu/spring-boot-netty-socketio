@@ -2,20 +2,17 @@ package com.project.chat.dao.impl;
 
 
 import com.project.chat.dao.GroupDao;
-import com.project.chat.entity.BaseEntity;
+import com.project.chat.entity.base.BaseEntity;
 import com.project.chat.entity.GroupEntity;
 import com.project.chat.entity.GroupUser;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-/**
- * Created by summer on 2017/5/5.
- */
-@Component
+@Repository
 public class GroupDaoImpl<T extends BaseEntity> extends BaseDaoImpl<GroupEntity> implements GroupDao<GroupEntity> {
 
 
@@ -52,9 +49,9 @@ public class GroupDaoImpl<T extends BaseEntity> extends BaseDaoImpl<GroupEntity>
         List<GroupUser> users = mongoTemplate.find(query, GroupUser.class);
 
         for (GroupUser user : users) {
-            query = new Query(Criteria.where("id").is(user.getGroup_id()));
+            query = new Query(Criteria.where("id").is(user.getGroupId()));
             GroupEntity entity = mongoTemplate.findOne(query, GroupEntity.class);
-            if (!entity.getUser_id().equals(user_id)) { //不是自己创建的群 (只是加入的群)
+            if (!entity.getUserId().equals(user_id)) { //不是自己创建的群 (只是加入的群)
                 list.add(entity);
             }
         }

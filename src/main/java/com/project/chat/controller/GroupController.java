@@ -60,8 +60,8 @@ public class GroupController extends BaseController<UserEntity> {
     public String findGroupUsers(String id) {
         List<GroupUser> list = groupSerivice.findUsersByGroupId(id);
         for (GroupUser user : list) {
-            user.setId(user.getUser_id());
-            user.setUser_id("");
+            user.setId(user.getUserId());
+            user.setUserId("");
         }
         JSONObject obj = new JSONObject();
         obj.put("list", list);

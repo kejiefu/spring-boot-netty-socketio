@@ -1,10 +1,8 @@
 package com.project.chat.exception;
 
 import com.alibaba.fastjson.JSON;
-
 import com.project.chat.model.Result;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,9 +12,8 @@ import java.util.Enumeration;
 
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-
-    private static Logger logger = LogManager.getLogger(GlobalExceptionHandler.class.getName());
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
@@ -33,6 +30,7 @@ public class GlobalExceptionHandler {
 
     /**
      * 重复
+     *
      * @param e
      * @return
      * @throws Exception
@@ -44,22 +42,22 @@ public class GlobalExceptionHandler {
     }
 
     private void log(Exception ex, HttpServletRequest request) {
-        logger.error("有异常啦：============》" + ex.getMessage());
-        logger.error("************************异常开始*******************************");
-        logger.error(ex);
-        logger.error("请求地址：" + request.getRequestURL());
+        log.error("有异常啦：============》" + ex.getMessage());
+        log.error("************************异常开始*******************************");
+        log.error("", ex);
+        log.error("请求地址：" + request.getRequestURL());
         Enumeration enumeration = request.getParameterNames();
-        logger.error("请求参数：");
+        log.error("请求参数：");
         while (enumeration.hasMoreElements()) {
             String name = enumeration.nextElement().toString();
-            logger.error(name + "---" + request.getParameter(name));
+            log.error(name + "---" + request.getParameter(name));
         }
 
         StackTraceElement[] error = ex.getStackTrace();
         for (StackTraceElement stackTraceElement : error) {
-            logger.error(stackTraceElement.toString());
+            log.error(stackTraceElement.toString());
         }
-        logger.error("************************异常结束*******************************");
+        log.error("************************异常结束*******************************");
     }
 
 }

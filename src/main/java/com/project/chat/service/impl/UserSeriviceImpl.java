@@ -4,16 +4,13 @@ package com.project.chat.service.impl;
 import com.project.chat.dao.AddMessageDao;
 import com.project.chat.dao.GroupDao;
 import com.project.chat.dao.UserDao;
-import com.project.chat.entity.BaseEntity;
+import com.project.chat.entity.base.BaseEntity;
 import com.project.chat.entity.UserEntity;
 import com.project.chat.exception.RepeatException;
 import com.project.chat.service.UserSerivice;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,22 +24,17 @@ public class UserSeriviceImpl<T extends BaseEntity> extends BaseSeriviceImpl<Use
     @Resource
     GroupDao groupDao;
 
-
     @Resource
     AddMessageDao addMessageDao;
 
-//        Query.query(Criteria.where("classObj.$id")
-//                .is(new ObjectId("57fa4b99d4c68bb7d044d616"))), Student.class)
-
-
     @Override
-    public UserEntity findUserByUserName(String name) {
-        return userDao.findUserByUserName(name);
+    public UserEntity findUserByName(String name) {
+        return userDao.findUserByName(name);
     }
 
     @Override
-    public UserEntity findUserByToken(String access_token) {
-        return userDao.findUserByToken(access_token);
+    public UserEntity findUserByToken(String token) {
+        return userDao.findUserByToken(token);
     }
 
     /**
@@ -54,25 +46,14 @@ public class UserSeriviceImpl<T extends BaseEntity> extends BaseSeriviceImpl<Use
      */
     @Override
     public UserEntity register(String name, String password, String avatar) {
-
         //用户名必须唯一
-        if (userDao.findUserByUserName(name) != null) {
+        if (userDao.findUserByName(name) != null) {
             throw new RepeatException(-1, "用户名不能重复");
         }
 
-        //获取当前日期
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date today = new Date();
-        //获取三十天后日期
-        Calendar theCa = Calendar.getInstance();
-        theCa.setTime(today);
-        theCa.add(theCa.DATE, 30);
-        Date start = theCa.getTime();
-        String startDate = sdf.format(start);//三十天之后日期
-
         UserEntity user = new UserEntity();
-        user.setAuth_token(UUID.randomUUID().toString());
-        user.setAuth_date(startDate);
+        user.setToken(UUID.randomUUID().toString());
+
         user.setUsername(name);
         user.setPassword(password);
         user.setAvatar(avatar);

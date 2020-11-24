@@ -1,7 +1,7 @@
 package com.project.chat.dao;
 
 
-import com.project.chat.entity.BaseEntity;
+import com.project.chat.entity.base.BaseEntity;
 import com.project.chat.entity.GroupEntity;
 import com.project.chat.entity.GroupUser;
 

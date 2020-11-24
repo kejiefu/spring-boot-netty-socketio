@@ -2,7 +2,7 @@ package com.project.chat.service.impl;
 
 
 import com.project.chat.dao.GroupDao;
-import com.project.chat.entity.BaseEntity;
+import com.project.chat.entity.base.BaseEntity;
 import com.project.chat.entity.GroupEntity;
 import com.project.chat.entity.GroupUser;
 import com.project.chat.entity.UserEntity;
@@ -26,18 +26,16 @@ public class GroupSeriviceImpl<T extends BaseEntity> extends BaseSeriviceImpl<Gr
     @Transactional
     @Override
     public GroupEntity creatGroup(String name, String avatar, UserEntity user) {
-
         //不允许 创建重复的群名字
         if (groupDao.findGroupsByGroupName(name).size() > 0) {
             throw new RepeatException(-1, "群名称不能重复");
         }
-
         //创建 群组
         GroupEntity entity = new GroupEntity();
-        entity.setCreat_date(DateUtils.getDataTimeYMD());
+        entity.setCreatTime(DateUtils.getDataTimeYMD());
         entity.setGroupname(name);
-        entity.setUser_id(user.getId());
-        entity.setUser_name(user.getUsername());
+        entity.setUserId(user.getId());
+        entity.setUserName(user.getUsername());
         entity.setAvatar(avatar);
         groupDao.saveEntity(entity);
 
@@ -47,22 +45,27 @@ public class GroupSeriviceImpl<T extends BaseEntity> extends BaseSeriviceImpl<Gr
         return entity;
     }
 
-    //加入群组
+    /**
+     * 加入群组
+     *
+     * @param user
+     * @param groupId
+     * @return
+     */
     @Override
     public GroupUser joinGroup(UserEntity user, String groupId) {
 
         GroupUser groupUser = new GroupUser();
-        groupUser.setGroup_id(groupId);
-        groupUser.setUser_id(user.getId());
+        groupUser.setGroupId(groupId);
+        groupUser.setUserId(user.getId());
         groupUser.setUsername(user.getUsername());
         groupUser.setAvatar(user.getAvatar());
         groupUser.setSign(user.getSign());
-        groupUser.setJoninTime(DateUtils.getDataTimeYMDHMS());
+        groupUser.setJoinTime(DateUtils.getDataTimeYMDHMS());
 
         groupDao.saveEntity(groupUser);
         return groupUser;
     }
-
 
 
     /**
@@ -95,7 +98,6 @@ public class GroupSeriviceImpl<T extends BaseEntity> extends BaseSeriviceImpl<Gr
     public List<GroupEntity> findMyGroupsByUserId(String id) {
         return groupDao.findMyGroupsByUserId(id);
     }
-
 
 
 }

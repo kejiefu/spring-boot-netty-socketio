@@ -6,16 +6,16 @@ import com.corundumstudio.socketio.annotation.OnConnect;
 import com.corundumstudio.socketio.annotation.OnDisconnect;
 import com.corundumstudio.socketio.annotation.OnEvent;
 import com.google.protobuf.InvalidProtocolBufferException;
-
+import com.project.chat.dto.GpsData;
 import com.project.chat.entity.*;
 import com.project.chat.service.AddMessageSerivice;
 import com.project.chat.service.ChatSerivice;
 import com.project.chat.service.GroupSerivice;
 import com.project.chat.service.UserSerivice;
 import com.project.chat.utils.DateUtils;
-import com.project.chat.utils.SessionUtil;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import com.project.chat.utils.SessionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -24,7 +24,6 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
 
 
 @Component
@@ -61,14 +60,13 @@ public class MessageEventHandler {
     @OnConnect
     public void onConnect(SocketIOClient client) {
         HandshakeData hd = client.getHandshakeData();
-
         String auth_token = hd.getSingleUrlParam("auth_token");
         UserEntity userEntity = userSerivice.findUserByToken(auth_token);
         String userId = userEntity.getId();
         String userName = userEntity.getUsername();
         client.set("userId", userId);
         client.set("userName", userName);
-        SessionUtil.userId_socket_Map.put(userId, client);
+        SessionUtils.USER_ID_SOCKET_MAP.put(userId, client);
 
         //上线关联所在的群组
         List<GroupEntity> entityList = groupSerivice.findMyGroupsByUserId(userId);
@@ -86,7 +84,7 @@ public class MessageEventHandler {
      */
     @OnDisconnect
     public void onDisconnect(SocketIOClient client) {
-        SessionUtil.userId_socket_Map.remove(client.get("userId"));
+        SessionUtils.USER_ID_SOCKET_MAP.remove(client.get("userId"));
         logger.info(client.get("userName") + "---------》下 线了 " + sdf.format(new Date()));
     }
 
@@ -112,7 +110,7 @@ public class MessageEventHandler {
         //查询群下面的所有人  如果有当前群包含了 自己则说明是重复加群
         List<GroupUser> groupUsers = groupSerivice.findUsersByGroupId(msg.getGroupId());
         for (GroupUser user : groupUsers) {
-            if (user.getUser_id().equals(msg.getFromUid())) {
+            if (user.getUserId().equals(msg.getFromUid())) {
                 ackRequest.sendAckData("请勿重复加群");
                 logger.info("重复加群了。。。。。。兄弟");
                 return;
@@ -120,8 +118,8 @@ public class MessageEventHandler {
         }
         ackRequest.sendAckData("");
         addMessageSerivice.saveAddMessage(msg);
-        if (!StringUtils.isEmpty(id) && SessionUtil.userId_socket_Map.containsKey(id)) {
-            SocketIOClient socketIOClient = SessionUtil.userId_socket_Map.get(id);
+        if (!StringUtils.isEmpty(id) && SessionUtils.USER_ID_SOCKET_MAP.containsKey(id)) {
+            SocketIOClient socketIOClient = SessionUtils.USER_ID_SOCKET_MAP.get(id);
             socketIOClient.sendEvent("addGroup");
         }
         logger.info(msg.toString());
@@ -135,8 +133,8 @@ public class MessageEventHandler {
         ackRequest.sendAckData("");
         String id = object.getString("toUid");
         addMessageSerivice.updateAddMessage(object.getString("messageBoxId"));
-        if (!StringUtils.isEmpty(id) && SessionUtil.userId_socket_Map.containsKey(id)) {
-            SocketIOClient socketIOClient = SessionUtil.userId_socket_Map.get(id);
+        if (!StringUtils.isEmpty(id) && SessionUtils.USER_ID_SOCKET_MAP.containsKey(id)) {
+            SocketIOClient socketIOClient = SessionUtils.USER_ID_SOCKET_MAP.get(id);
             socketIOClient.sendEvent("refuseAddGroup");
         }
         logger.info(object.toString());
@@ -153,8 +151,8 @@ public class MessageEventHandler {
         ackRequest.sendAckData("");
         addMessageSerivice.updateAddMessage(entity, groupId, object.getString("messageBoxId"));
 
-        if (!StringUtils.isEmpty(id) && SessionUtil.userId_socket_Map.containsKey(id)) {
-            SocketIOClient socketIOClient = SessionUtil.userId_socket_Map.get(id);
+        if (!StringUtils.isEmpty(id) && SessionUtils.USER_ID_SOCKET_MAP.containsKey(id)) {
+            SocketIOClient socketIOClient = SessionUtils.USER_ID_SOCKET_MAP.get(id);
             socketIOClient.sendEvent("agreeAddGroup");
         }
         logger.info(object.toString());
@@ -174,10 +172,10 @@ public class MessageEventHandler {
      */
     @OnEvent(value = "chat")
     public void onEvent(SocketIOClient client, AckRequest ackRequest, MessageEntity msg) {
-        boolean isChat = msg.getChat_type().toString().equals("chat");
+        boolean isChat = msg.getChatTypeEnum().toString().equals("chat");
         //ack 返回数据 服务器收到发送的数据
         if (ackRequest.isAckRequested()) {
-            if (msg.getFrom_user().equals(msg.getTo_user())) {
+            if (msg.getFromUser().equals(msg.getToUser())) {
                 ackRequest.sendAckData("请不要给自己发消息");
                 return;
             }
@@ -186,41 +184,40 @@ public class MessageEventHandler {
 
             String toName = "";
             if (isChat) {
-                toName = msg.getTo_user();
+                toName = msg.getToUser();
             } else {
-                toName = "群： " + msg.getTo_user();
+                toName = "群： " + msg.getToUser();
             }
             logger.info("给 " + toName + " 发送的数据 服务器已经收到， 日期： " + sdf.format(new Date()));
             //发送ack回调数据到客户端
             ackRequest.sendAckData("");
         }
-        String to_user_id = msg.getTo_user_id(); //如果是 群聊，则对应群的id
-        String to_user_name = msg.getTo_user();
+        String toUserId = msg.getToUserId(); //如果是 群聊，则对应群的id
+        String toUser = msg.getToUser();
         if (isChat) {
             //单聊
             // 如果对方在线 则找到对应的client 给其发送消息
-            if (SessionUtil.userId_socket_Map.containsKey(to_user_id)) {
-                SessionUtil.userId_socket_Map.get(to_user_id).sendEvent("chat", new AckCallback<String>(String.class) {
+            if (SessionUtils.USER_ID_SOCKET_MAP.containsKey(toUserId)) {
+                SessionUtils.USER_ID_SOCKET_MAP.get(toUserId).sendEvent("chat", new AckCallback<String>(String.class) {
                     //对方客户端接收到消息 返回给服务器端
                     @Override
                     public void onSuccess(String result) {
-                        logger.info(to_user_name + "已收到消息 ， ack 回复 ： " + result + "    日期： " + sdf.format(new Date()));
+                        logger.info(toUser + "已收到消息 ， ack 回复 ： " + result + "    日期： " + sdf.format(new Date()));
                     }
 
                     //发送消息超时
                     @Override
                     public void onTimeout() {
-                        System.out.println(to_user_name + "---------》发送消息超时 " + sdf.format(new Date()));
+                        System.out.println(toUser + "---------》发送消息超时 " + sdf.format(new Date()));
                     }
                 }, msg);
             } else { //如果 下线 转apns 消息推送
-                logger.info(to_user_name + "---------》需要转 apns 消息推送 " + sdf.format(new Date()));
+                logger.info(toUser + "---------》需要转 apns 消息推送 " + sdf.format(new Date()));
             }
         } else {  //群聊
             logger.info("========================发送群消息==================================");
-            //server.getBroadcastOperations().sendEvent("groupChat",msg); //系统广播
             // 房间（群内）广播
-            server.getRoomOperations(to_user_id).sendEvent("chat", msg, new BroadcastAckCallback<String>(String.class) {
+            server.getRoomOperations(toUserId).sendEvent("chat", msg, new BroadcastAckCallback<String>(String.class) {
                 @Override
                 protected void onClientTimeout(SocketIOClient client) {
                     logger.info("群消息: " + client.get("userName") + " 发送超时了");

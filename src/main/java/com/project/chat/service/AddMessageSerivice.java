@@ -2,12 +2,12 @@ package com.project.chat.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.project.chat.entity.AddMessage;
-import com.project.chat.entity.BaseEntity;
+import com.project.chat.entity.base.BaseEntity;
 import com.project.chat.entity.UserEntity;
 
 
 
-public interface AddMessageSerivice<T extends BaseEntity> extends BaseSerivice<UserEntity> {
+public interface AddMessageSerivice<T extends BaseEntity> extends BaseService<UserEntity> {
 
     /**
      * 添加好友、群组信息请求

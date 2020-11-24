@@ -8,13 +8,10 @@
     <artifactId>spring-boot-netty-socketio</artifactId>
     <version>1.0.0</version>
 
-    <!-- Inherit defaults from Spring Boot
-spring-boot-starter-parent 是一个特殊的starter，它用来提供相关的Maven默认依赖。
-使用它之后，常用的包依赖可以省去version标签。-->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.9.RELEASE</version>
+        <version>2.1.9.RELEASE</version>
     </parent>
 
     <properties>
@@ -32,11 +29,13 @@ spring-boot-starter-parent 是一个特殊的starter，它用来提供相关的M
     </properties>
 
     <dependencies>
+
         <!--Spring Boot web依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <!--Spring Boot text-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -48,6 +47,7 @@ spring-boot-starter-parent 是一个特殊的starter，它用来提供相关的M
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
+
         <!--swagger2-->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -59,6 +59,7 @@ spring-boot-starter-parent 是一个特殊的starter，它用来提供相关的M
             <artifactId>springfox-swagger-ui</artifactId>
             <version>2.9.2</version>
         </dependency>
+
         <!--阿里 FastJson依赖-->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -66,12 +67,7 @@ spring-boot-starter-parent 是一个特殊的starter，它用来提供相关的M
             <version>1.2.61</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
-
+        <!--mongodb-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
@@ -84,21 +80,23 @@ spring-boot-starter-parent 是一个特殊的starter，它用来提供相关的M
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>springloaded</artifactId>
-            <version>1.2.6.RELEASE</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.turo</groupId>
             <artifactId>pushy</artifactId>
             <version>0.13.2</version>
         </dependency>
 
+        <!--protobuf-->
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>3.6.0</version>
+        </dependency>
+
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
         </dependency>
 
     </dependencies>

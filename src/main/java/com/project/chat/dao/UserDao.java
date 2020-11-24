@@ -1,7 +1,7 @@
 package com.project.chat.dao;
 
 
-import com.project.chat.entity.BaseEntity;
+import com.project.chat.entity.base.BaseEntity;
 import com.project.chat.entity.UserEntity;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface UserDao<T extends BaseEntity> extends BaseDao<UserEntity> {
 
-    UserEntity findUserByUserName(String name);
+    UserEntity findUserByName(String name);
 
     UserEntity findUserByToken(String accessToken);
 

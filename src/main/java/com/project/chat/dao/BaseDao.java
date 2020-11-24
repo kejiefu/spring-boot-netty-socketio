@@ -1,8 +1,7 @@
 package com.project.chat.dao;
 
 
-
-import com.project.chat.entity.BaseEntity;
+import com.project.chat.entity.base.BaseEntity;
 
 import java.util.List;
 
@@ -11,31 +10,30 @@ import java.util.List;
  */
 public interface BaseDao<T extends BaseEntity> {
 
-
     /**
      * 根据Id查询实体
      */
-    public T findEntityById(String id);
+    T findEntityById(String id);
 
     /**
      * 新增实体
      */
-    public void  saveEntity(T entity);
+    void saveEntity(T entity);
 
     /**
      * 更新实体
      */
-    public T updateEntityById(String id,T entity);
+    T updateEntityById(String id, T entity);
 
     /**
      * 根据Id删除实体
      */
-    public int deleteEntityById(String id);
+    long deleteEntityById(String id);
 
     /**
      * 查询全部
      */
-    public List<T> selectAll();
+    List<T> selectAll();
 
 
 }

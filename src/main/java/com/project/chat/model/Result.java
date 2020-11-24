@@ -1,7 +1,7 @@
 package com.project.chat.model;
 
 
-import com.project.chat.enums.EResultType;
+import com.project.chat.enums.ResultTypeEnum;
 
 public class Result<T> {
 
@@ -33,13 +33,13 @@ public class Result<T> {
         this.data = data;
     }
 
-    public Result(EResultType type, T data) {
+    public Result(ResultTypeEnum type, T data) {
         this.code = type.getCode();
         this.msg = type.getMsg();
         this.data = data;
     }
 
-    public Result(EResultType type) {
+    public Result(ResultTypeEnum type) {
         this.code = type.getCode();
         this.msg = type.getMsg();
     }

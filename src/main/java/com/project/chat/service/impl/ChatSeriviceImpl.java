@@ -1,7 +1,7 @@
 package com.project.chat.service.impl;
 
 
-import com.project.chat.entity.BaseEntity;
+import com.project.chat.entity.base.BaseEntity;
 import com.project.chat.entity.MessageEntity;
 import com.project.chat.service.ChatSerivice;
 import com.turo.pushy.apns.ApnsClient;
@@ -16,14 +16,13 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 
-
 @Component
 public class ChatSeriviceImpl<T extends BaseEntity> extends BaseSeriviceImpl<MessageEntity> implements ChatSerivice<MessageEntity> {
 
     @Override
     public void saveMessageData(MessageEntity entity) {
         long time = System.currentTimeMillis();
-        entity.setTimestamp(time);
+        entity.setCreateTime(time);
         saveEntity(entity);
     }
 
@@ -47,7 +46,6 @@ public class ChatSeriviceImpl<T extends BaseEntity> extends BaseSeriviceImpl<Mes
             final Future sendNotificationFuture = apnsClient.sendNotification(pushNotification);
 
             sendNotificationFuture.addListener(new GenericFutureListener<Future<PushNotificationResponse>>() {
-
                 @Override
                 public void operationComplete(final Future<PushNotificationResponse> future) throws Exception {
                     final PushNotificationResponse response = future.getNow();
