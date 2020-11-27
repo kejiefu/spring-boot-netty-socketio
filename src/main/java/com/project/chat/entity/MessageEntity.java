@@ -50,6 +50,7 @@ public class MessageEntity extends BaseEntity {
      * 群聊 房间id (群聊时房间name)
      */
     private String groupName;
+
     /**
      * 扩展数据
      */

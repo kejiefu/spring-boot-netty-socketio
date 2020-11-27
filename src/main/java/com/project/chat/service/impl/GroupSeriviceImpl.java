@@ -32,8 +32,8 @@ public class GroupSeriviceImpl<T extends BaseEntity> extends BaseSeriviceImpl<Gr
         }
         //创建 群组
         GroupEntity entity = new GroupEntity();
-        entity.setCreatTime(DateUtils.getDataTimeYMD());
-        entity.setGroupname(name);
+        entity.setCreateTime(DateUtils.getDataTimeYMD());
+        entity.setGroupName(name);
         entity.setUserId(user.getId());
         entity.setUserName(user.getUsername());
         entity.setAvatar(avatar);

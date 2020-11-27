@@ -34,7 +34,9 @@ public class Bodies extends BaseEntity {
      */
     private String originImagePath;
 
-    /*位置*/
+    /**
+     * 位置
+     */
     private double latitude;
 
     private double longitude;

@@ -72,7 +72,7 @@ public class MessageEventHandler {
         List<GroupEntity> entityList = groupSerivice.findMyGroupsByUserId(userId);
 
         for (GroupEntity entity : entityList) {
-            logger.info(userName + "自动关联了群 " + entity.getGroupname() + "   " + sdf.format(new Date()));
+            logger.info(userName + "自动关联了群 " + entity.getGroupName() + "   " + sdf.format(new Date()));
             client.joinRoom(entity.getId());
         }
 

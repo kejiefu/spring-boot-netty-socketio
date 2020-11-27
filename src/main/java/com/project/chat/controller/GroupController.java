@@ -1,35 +1,34 @@
 package com.project.chat.controller;
 
 import com.alibaba.fastjson.JSONObject;
-
 import com.project.chat.entity.GroupEntity;
 import com.project.chat.entity.GroupUser;
 import com.project.chat.entity.UserEntity;
 import com.project.chat.service.GroupSerivice;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Controller
 @RequestMapping(value = "/group")
 public class GroupController extends BaseController<UserEntity> {
 
-    @Autowired
+    @Resource
     GroupSerivice groupSerivice;
 
 
     /**
-     * 根据名字 查询 对应的群，群名称为空则查询 所有群
+     * 创建群组
      *
      * @return
      */
     @ResponseBody
-    @PostMapping(value = "/creat")
+    @PostMapping(value = "/create")
     public String creatGroup(String name, String avatar) {
         GroupEntity groupEntity = groupSerivice.creatGroup(name, avatar, getSessionUser());
         return retResultData(0, "", groupEntity);

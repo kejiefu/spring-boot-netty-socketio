@@ -63,7 +63,7 @@ public class AddMessageSeriviceImpl<T extends BaseEntity> extends BaseSeriviceIm
             AddInfo info = new AddInfo();
             if (message.getType().equals("group")) {
                 GroupEntity entity = (GroupEntity) groupDao.findEntityById(message.getGroupId());
-                info.setContent("申请加入 '" + entity.getGroupname() + "' 群聊!");
+                info.setContent("申请加入 '" + entity.getGroupName() + "' 群聊!");
             } else {
                 info.setContent("申请添加你为好友");
             }
@@ -99,8 +99,8 @@ public class AddMessageSeriviceImpl<T extends BaseEntity> extends BaseSeriviceIm
     @Override
     @Transactional
     public void updateAddMessage(UserEntity entity, String groupId, String messageId) {
-
-        String userId = entity.getId(); //申请加群的人
+        //申请加群的人
+        String userId = entity.getId();
         //查询群下面的所有人  如果有当前群包含了 自己则说明是重复加群
         List<GroupUser> groupUsers = groupSerivice.findUsersByGroupId(groupId);
         for (GroupUser user : groupUsers) {

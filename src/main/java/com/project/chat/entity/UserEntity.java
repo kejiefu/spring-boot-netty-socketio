@@ -25,6 +25,7 @@ public class UserEntity extends BaseEntity {
     private String avatar;
 
     private String nickname;
+
     /**
      * 性别 0 男，1，女 2，其他
      */

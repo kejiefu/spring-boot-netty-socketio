@@ -19,7 +19,7 @@ public class GroupEntity extends BaseEntity {
     /**
      * 群的名字
      */
-    private String groupname;
+    private String groupName;
 
     /**
      * 创建的人 id
@@ -34,7 +34,7 @@ public class GroupEntity extends BaseEntity {
     /**
      * 创建时间
      */
-    private String creatTime;
+    private String createTime;
 
     /**
      * 群的头像
