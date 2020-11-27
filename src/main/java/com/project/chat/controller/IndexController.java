@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class IndexController extends BaseController {
 
-    @RequestMapping("/")
+    @RequestMapping("/login")
     public String index(HttpSession session) {
         if (session.getAttribute("username") != null) {
             return "static/index.html";
