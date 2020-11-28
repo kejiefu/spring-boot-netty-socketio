@@ -16,4 +16,5 @@ public class IndexController extends BaseController {
         }
         return "static/login.html";
     }
+
 }

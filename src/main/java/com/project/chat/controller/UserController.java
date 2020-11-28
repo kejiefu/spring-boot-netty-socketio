@@ -153,8 +153,8 @@ public class UserController extends BaseController<UserEntity> {
 
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public @ResponseBody
-    String uploadImg(@RequestParam("file") MultipartFile file,
+    @ResponseBody
+    public String uploadImg(@RequestParam("file") MultipartFile file,
                      HttpServletRequest request) throws UnknownHostException {
         if (file.isEmpty()) {
             return retResultData(-1, "上传文件不能为空");
