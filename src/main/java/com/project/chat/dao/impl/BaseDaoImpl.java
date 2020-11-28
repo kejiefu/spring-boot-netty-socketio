@@ -57,7 +57,7 @@ public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
         JSONObject jsonObject = (JSONObject) JSON.toJSON(entity);
 
         for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
-            if (!entry.getKey().equals("id")) {
+            if (!"id".equals(entry.getKey())) {
                 update.set(entry.getKey(), entry.getValue() == null ? "" : entry.getValue());
             }
         }

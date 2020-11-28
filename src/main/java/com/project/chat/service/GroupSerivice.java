@@ -52,7 +52,7 @@ public interface GroupSerivice<T extends BaseEntity> extends BaseService<GroupEn
      *
      * @return
      */
-    List<GroupUser> findUsersByGroupId(String group_id);
+    List<GroupUser> findUsersByGroupId(String groupId);
 
 
 }

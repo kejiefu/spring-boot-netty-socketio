@@ -61,7 +61,7 @@ public class AddMessageSeriviceImpl<T extends BaseEntity> extends BaseSeriviceIm
         List<AddInfo> infos = new ArrayList<>();
         for (AddMessage message : list) {
             AddInfo info = new AddInfo();
-            if (message.getType().equals("group")) {
+            if ("group".equals(message.getType())) {
                 GroupEntity entity = (GroupEntity) groupDao.findEntityById(message.getGroupId());
                 info.setContent("申请加入 '" + entity.getGroupName() + "' 群聊!");
             } else {
