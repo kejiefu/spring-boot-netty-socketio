@@ -1,4 +1,5 @@
 # spring-boot-netty-socketio
+
 基于netty-socketio的网络聊天室
 
 技术：spring boot，netty-socketio
@@ -8,3 +9,5 @@
 H5页面：layim 框架，socket.io 
 
 数据库：mongodb
+
+访问地址：http://localhost:8080/login
