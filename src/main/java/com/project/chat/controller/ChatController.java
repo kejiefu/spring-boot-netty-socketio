@@ -4,17 +4,18 @@ package com.project.chat.controller;
 import com.project.chat.entity.MessageEntity;
 import com.project.chat.enums.ResultTypeEnum;
 import com.project.chat.service.ChatSerivice;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
 
 
 @Controller
 @RequestMapping(value = "/chat")
 public class ChatController extends BaseController<MessageEntity> {
 
-    @Autowired
+    @Resource
     ChatSerivice chatSerivice;
 
     @ResponseBody

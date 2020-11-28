@@ -172,7 +172,8 @@ public class UserController extends BaseController<UserEntity> {
         }
 
         InetAddress addr = InetAddress.getLocalHost();
-        String ip = addr.getHostAddress();//获得本机IP
+        //获得本机IP
+        String ip = addr.getHostAddress();
         JSONObject obj = new JSONObject();
         obj.put("src", "http://" + ip + ":" + port + "/static/" + uuid + fileName);
         //返回json
